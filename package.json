@@ -1,0 +1,6 @@
+{
+  "name": "ajournal",
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}
