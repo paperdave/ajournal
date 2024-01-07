@@ -15,12 +15,23 @@ import { spawnSync } from "node:child_process";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
+function defaultIntake() {
+  const to_check = [
+    '/Volumes/ajournal/A',
+    './intake'
+  ];
+  for (const x of to_check) {
+    if (existsSync(x)) return x;
+  }
+  throw new Error("could not find intake dir");
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const data_dir = join(__dirname, "../data");
 
-const intake_dir = resolve(data_dir, process.argv[2] ?? "./intake");
+const intake_dir = resolve(data_dir, process.argv[2] ?? defaultIntake());
 const out_dir = join(data_dir, "audio");
 
 const validated_list = readdirSync(intake_dir)
