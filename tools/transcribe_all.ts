@@ -67,7 +67,7 @@ for (const x of readdirSync(audio_dir)) {
     const proc = Bun.spawnSync({
       cmd: args,
       stdio: ["inherit", "inherit", "inherit"],
-      cwd: `${userInfo().homedir}/code/whisperX/`
+      cwd: join(__dirname, "../whisperX")
     });
     if (!proc.success) {
       console.error("Transcription failed");

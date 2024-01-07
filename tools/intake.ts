@@ -9,8 +9,8 @@
 //! the input spec is weird because it is what my audio recorder outputs.
 //! i would definetly accept PRs for other intake formats.
 import assert from "node:assert";
-import { readdirSync, rmSync, statSync, utimesSync } from "node:fs";
-import { basename, join } from "node:path";
+import { existsSync, readdirSync, rmSync, statSync, utimesSync } from "node:fs";
+import { basename, join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -20,7 +20,7 @@ const __dirname = dirname(__filename);
 
 const data_dir = join(__dirname, "../data");
 
-const intake_dir = join(data_dir, "intake");
+const intake_dir = resolve(data_dir, process.argv[2] ?? "./intake");
 const out_dir = join(data_dir, "audio");
 
 const validated_list = readdirSync(intake_dir)
@@ -59,6 +59,11 @@ console.log(validated_list);
 
 const start = performance.now();
 for (const { input_file, output_file, date } of validated_list) {
+  if(existsSync(output_file)) {
+    console.log("skipping %s", basename(output_file));
+    continue;
+  }
+
   const args = [
     "ffmpeg",
     "-hide_banner",
